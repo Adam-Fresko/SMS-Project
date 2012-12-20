@@ -134,9 +134,6 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	static Activity	    activity;
 
-	
-
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 	    super.onActivityCreated(savedInstanceState);
@@ -145,12 +142,10 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    DataGetters dataGetters = new DataGetters();
 
 	    List<String> msgList = dataGetters.getCONVERSATIONS(activity.getApplicationContext());
-	    
+
 	    adapter = new ConversationAdapter(activity, msgList);
 
-	 setListAdapter(adapter);
-	
-
+	    setListAdapter(adapter);
 
 	    // Check to see if we have a frame in which to embed the details
 	    // fragment directly in the containing UI.
@@ -171,8 +166,6 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	    }
 	}
-
-	
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -234,6 +227,11 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	 * Create a new instance of DetailsFragment, initialized to show the
 	 * text at 'index'.
 	 */
+
+	static DetailsAdapter adapter;
+	static Activity       activity;
+	static int intWitchConversationShown;
+
 	public static DetailsFragment newInstance(int index) {
 	    DetailsFragment f = new DetailsFragment();
 
@@ -263,16 +261,15 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		return null;
 	    }
 
-	    ListView coversacja = new ListView(getActivity());
-
+	    activity = getActivity();
 	    DataGetters dataGetters = new DataGetters();
 
-	    // List<String> msgList = getSMS();
-	    //
-	    List<String> msgList = dataGetters.getSMS(getActivity().getApplication().getApplicationContext(), getShownIndex());
-
-	    coversacja.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.simple_list_item_checkable_1, android.R.id.text1, msgList));
-
+	    ListView coversacja = new ListView(getActivity());
+	    intWitchConversationShown = getShownIndex();
+	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), getShownIndex());
+	    
+	    adapter = new DetailsAdapter(activity, msgList);
+	    coversacja.setAdapter(adapter);
 	    return coversacja;
 
 	}
