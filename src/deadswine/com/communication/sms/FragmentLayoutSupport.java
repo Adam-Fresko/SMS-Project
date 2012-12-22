@@ -47,9 +47,10 @@ import com.actionbarsherlock.widget.SearchView;
  * landscape.
  */
 public class FragmentLayoutSupport extends SherlockFragmentActivity {
-    public static int      THEME = R.style.Theme_Sherlock;
+    public static int      THEME  = R.style.Theme_Sherlock;
     private static Context context;
     public static String   thread_ids;
+    public static int      isOpen = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +59,34 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	setContentView(R.layout.fragment_layout_support);
 
-	FragmentLayoutSupport.context = getApplicationContext();
+	context = getApplicationContext();
 	getSupportActionBar().setDisplayShowTitleEnabled(false); // hide title
 
 	getSupportActionBar().setDisplayHomeAsUpEnabled(false); // set if home icon is navigation
 	getSupportActionBar().setDisplayUseLogoEnabled(false); // donot use logo
 	getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
+
+	isOpen = 1;
     }
+
+    @Override
+    protected void onPause() {
+	super.onPause();
+	Log.d("FragmentLayoutSupport", "CALLED -- onPause()");
+
+	isOpen = 0;
+
+    }
+
+    @Override
+    protected void onPostResume() {
+	super.onPostResume();
+	Log.d("FragmentLayoutSupport", "CALLED -- onPostResume()");
+	
+	new ReceiverClass().execute("");
+    }
+    
+    
 
     public static Context getAppContext() {
 	return FragmentLayoutSupport.context;
@@ -110,7 +132,13 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		return;
 
 	    }
+	    
+	    getSupportActionBar().setDisplayShowTitleEnabled(false); // hide title
 
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false); // set if home icon is navigation
+		getSupportActionBar().setDisplayUseLogoEnabled(false); // donot use logo
+		getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
+	    
 	    if (savedInstanceState == null) {
 		// During initial setup, plug in the details fragment.
 		DetailsFragment details = new DetailsFragment();
@@ -118,6 +146,27 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		getSupportFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
 	    }
 	}
+	
+	// top action bar menu
+	    @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Create the search view
+		SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
+		searchView.setQueryHint("Search Recipient");
+
+		menu.add("Compose").setIcon(R.drawable.ic_compose).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		menu.add("Search").setIcon(R.drawable.ic_search).setActionView(searchView).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+		SubMenu sub = menu.addSubMenu("Theme");
+		sub.add(0, R.style.Theme_Sherlock, 0, "Default");
+		sub.add(0, R.style.Theme_Sherlock_Light, 0, "Light");
+		sub.add(0, R.style.Theme_Sherlock_Light_DarkActionBar, 0, "Light (Dark Action Bar)");
+		sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		return super.onCreateOptionsMenu(menu);
+	    }
+	
     }
 
     /**
@@ -146,6 +195,8 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    adapter = new ConversationAdapter(activity, msgList);
 
 	    setListAdapter(adapter);
+	    
+	 
 
 	    // Check to see if we have a frame in which to embed the details
 	    // fragment directly in the containing UI.
@@ -230,7 +281,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	static DetailsAdapter adapter;
 	static Activity       activity;
-	static int intWitchConversationShown;
+	static int	    intWitchConversationShown;
 
 	public static DetailsFragment newInstance(int index) {
 	    DetailsFragment f = new DetailsFragment();
@@ -260,16 +311,17 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		// the view hierarchy; it would just never be used.
 		return null;
 	    }
-
+	    intWitchConversationShown = getShownIndex();
 	    activity = getActivity();
 	    DataGetters dataGetters = new DataGetters();
 
 	    ListView coversacja = new ListView(getActivity());
-	    intWitchConversationShown = getShownIndex();
 	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), getShownIndex());
-	    
+
 	    adapter = new DetailsAdapter(activity, msgList);
 	    coversacja.setAdapter(adapter);
+	    coversacja.setTranscriptMode(2);
+
 	    return coversacja;
 
 	}
