@@ -137,6 +137,8 @@ public class DetailsAdapter extends BaseAdapter {
 
 	cursor.moveToPosition(intWitchConversationShown);
 	String id = cursor.getString(cursor.getColumnIndex("_id"));
+	String recipinet_id = cursor.getString(cursor.getColumnIndex("recipient_ids"));
+	Log.d("recipient ids", recipinet_id);
 	ConversationSelection = "thread_id = " + id; // + "63"
 	cursor.close();
     }

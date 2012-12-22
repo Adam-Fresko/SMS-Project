@@ -30,7 +30,7 @@ public class DataGetters {
 	}
 	// prints columns names
 	for (int i = 0; i < cur.getColumnCount(); i++) {
-	    Log.v("column names", cur.getColumnName(i).toString());
+	    Log.v("column names from sms", cur.getColumnName(i).toString());
 	}
 
 	return sms;

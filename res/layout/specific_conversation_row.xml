@@ -11,10 +11,17 @@
 
     <!-- With Who Conversation -->
 
+    <QuickContactBadge
+        android:id="@+id/quickContactBadge1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon" />
+
 <RelativeLayout
     android:id="@+id/Layout2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/quickContactBadge1"
     android:background="@drawable/msgbox_other" >
 
     <TextView
@@ -32,6 +39,7 @@
 
     <TextView
         android:id="@+id/smsBody"
+        android:autoLink="all"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/WithWho"
@@ -59,17 +67,6 @@
         android:textStyle="bold" />
 
     <!-- Rightend Arrow -->
-
-    <ImageView
-        android:id="@+id/arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:adjustViewBounds="true"
-        android:maxHeight="20dp"
-        android:maxWidth="20dp"
-        android:src="@drawable/arrow_right" />
 
     
     </RelativeLayout>

@@ -196,7 +196,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	    setListAdapter(adapter);
 	    
-	 
+	
 
 	    // Check to see if we have a frame in which to embed the details
 	    // fragment directly in the containing UI.

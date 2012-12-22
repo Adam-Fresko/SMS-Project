@@ -1,13 +1,24 @@
 package deadswine.com.communication.sms;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.PhoneLookup;
+import android.provider.ContactsContract.Profile;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +35,13 @@ public class ConversationAdapter extends BaseAdapter {
     ImageView		     imgArrow;
 
     private Activity	      activity;
-    static List<String>	  msgList;
+    static List<String>	   msgList;
     private static LayoutInflater inflater = null;
 
-    public String		 messageCount, messageHasAttachment, messageRead, messageDate,messageSnippet;
+    public String		 messageCount, messageHasAttachment, messageRead, messageDate, messageSnippet;
     public String		 contactPhone, contactName;
+    public String		 photo_id;
+    public String		 contactImg;
     public String		 conversationID;
 
     public ConversationAdapter(Activity a, List<String> data) {
@@ -62,10 +75,8 @@ public class ConversationAdapter extends BaseAdapter {
 
 	querryConversationDB(position);
 
-	
-	
 	listBody.setText(messageSnippet);
-	Log.d("getView(", " sms txt = "+messageSnippet);
+	Log.d("getView(", " sms txt = " + messageSnippet);
 	Long timestamp = Long.parseLong(messageDate);
 	Calendar calendar = Calendar.getInstance();
 	calendar.setTimeInMillis(timestamp);
@@ -75,11 +86,15 @@ public class ConversationAdapter extends BaseAdapter {
 	listDate.setText(smsDate);
 
 	querrySmsDB();
-//
-	listWithWho.setText(contactPhone);
-	
-	listQuickContactBadge.assignContactFromPhone(contactPhone, false);
 	querryPeople();
+	
+	listWithWho.setText(contactName);
+
+	listQuickContactBadge.assignContactFromPhone(contactPhone, false);
+	
+	listQuickContactBadge.setImageBitmap(getFacebookPhoto(contactPhone));
+	
+	
 	return vi;
     }
 
@@ -97,28 +112,70 @@ public class ConversationAdapter extends BaseAdapter {
 	messageRead = cur.getString(cur.getColumnIndex("read"));
 	messageDate = cur.getString(cur.getColumnIndex("date"));
 	conversationID = cur.getString(cur.getColumnIndex("_id"));
-	Log.d("xxxx", conversationID);
 
     }
 
     public void querrySmsDB() {
 	Log.d("ConversationAdapter", "querrySmsDB() CALLED ");
-	
-	final String[] projection = new String[] { "*" };
+
+	final String[] projection = new String[] { "address" };
 	String selection = "thread_id = " + conversationID;
 	Uri uri = Uri.parse("content://sms");
 	Cursor cur = activity.getApplicationContext().getContentResolver().query(uri, projection, selection, null, null);
 	cur.moveToFirst();
-	Log.d("xxxx", conversationID);
+
 	contactPhone = cur.getString(cur.getColumnIndexOrThrow("address"));
-	//contactName = cur.getString(cur.getColumnIndex("person"));
 
     }
+
+   
 
     public void querryPeople() {
-	Log.d("ConversationAdapter", "querryPeople() CALLED ");
-	
-	
+	final String[] PROJECTION = new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.PHOTO_URI };
+	Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactPhone);
+	Cursor cur = activity.getContentResolver().query(personUri, null, null, null, null);
+	if (cur.moveToFirst()) {
+	    int nameIdx = cur.getColumnIndex(PhoneLookup.DISPLAY_NAME);
+	    int photo = cur.getColumnIndex(PhoneLookup.PHOTO_URI);
+	    contactName = cur.getString(nameIdx);
+	    // listQuickContactBadge.setImageURI(photo);
+	} else {
+	    contactName = contactPhone;
+
+	}//
+	 // for (int i = 0; i < cur.getColumnCount(); i++) {
+	 //Log.v("column names from phones", cur.getColumnName(i).toString());
+	 //  }
+	cur.close();
     }
 
+    public Bitmap getFacebookPhoto(String phoneNumber) {
+	Uri phoneUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+	Uri photoUri = null;
+	ContentResolver cr = activity.getContentResolver();
+	Cursor contact = cr.query(phoneUri, new String[] { ContactsContract.Contacts._ID }, null, null, null);
+
+	if (contact.moveToFirst()) {
+	    long userId = contact.getLong(contact.getColumnIndex(ContactsContract.Contacts._ID));
+	    photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, userId);
+
+	} else {
+	    // uncnown contact
+	    Bitmap defaultPhoto = BitmapFactory.decodeResource(activity.getResources(), R.drawable.light_contact_add);
+	    return defaultPhoto;
+	}
+	if (photoUri != null) {
+	    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, photoUri);
+	    if (input != null) {
+		return BitmapFactory.decodeStream(input);
+	    }
+	} else {
+	 // contact nie wiem jaki - jêsli uri jest null?
+	    Bitmap defaultPhoto = BitmapFactory.decodeResource(activity.getResources(), android.R.drawable.ic_menu_report_image);
+	    return defaultPhoto;
+	}
+	//contact witchout photo
+	Bitmap defaultPhoto = BitmapFactory.decodeResource(activity.getResources(), R.drawable.light_user_no_img);
+	return defaultPhoto;
+    }
 }
