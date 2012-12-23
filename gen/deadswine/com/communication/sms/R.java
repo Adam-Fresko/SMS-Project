@@ -1057,6 +1057,7 @@ containing a value of this type.
         public static final int sherlock_spinner_item=0x7f03001b;
         public static final int simple_list_item_checkable_1=0x7f03001c;
         public static final int specific_conversation_row=0x7f03001d;
+        public static final int specific_conversation_row_self=0x7f03001e;
     }
     public static final class menu {
         public static final int shortcuts=0x7f0c0000;

@@ -30,8 +30,6 @@ import android.widget.TextView;
 
 public class ConversationAdapter extends BaseAdapter {
 
-    TextView		      listDate, listBody, listWithWho;
-    QuickContactBadge	     listQuickContactBadge;
     ImageView		     imgArrow;
 
     private Activity	      activity;
@@ -51,6 +49,12 @@ public class ConversationAdapter extends BaseAdapter {
 
     }
 
+    public static class ViewHolder {
+	public TextView	  listDate, listBody, listWithWho;
+
+	public QuickContactBadge listQuickContactBadge;
+    }
+
     public int getCount() {
 	return msgList.size();
     }
@@ -64,18 +68,24 @@ public class ConversationAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+	ViewHolder holder;
 	View vi = convertView;
-	if (convertView == null)
+	if (convertView == null) {
 	    vi = inflater.inflate(R.layout.conversations_list_row, null);
+	    holder = new ViewHolder();
+	    holder.listWithWho = (TextView) vi.findViewById(R.id.WithWho);
+	    holder.listBody = (TextView) vi.findViewById(R.id.smsBody);
+	    holder.listDate = (TextView) vi.findViewById(R.id.date);
+	    holder.listQuickContactBadge = (QuickContactBadge) vi.findViewById(R.id.quickContactBadge);
+	    vi.setTag(holder);
 
-	listQuickContactBadge = (QuickContactBadge) vi.findViewById(R.id.quickContactBadge);
-	listWithWho = (TextView) vi.findViewById(R.id.WithWho);
-	listBody = (TextView) vi.findViewById(R.id.smsBody);
-	listDate = (TextView) vi.findViewById(R.id.date);
-
+	} else {
+	    holder = (ViewHolder) vi.getTag();
+	}
 	querryConversationDB(position);
-
-	listBody.setText(messageSnippet);
+	querrySmsDB();
+	querryPeople();
+	
 	Log.d("getView(", " sms txt = " + messageSnippet);
 	Long timestamp = Long.parseLong(messageDate);
 	Calendar calendar = Calendar.getInstance();
@@ -83,27 +93,24 @@ public class ConversationAdapter extends BaseAdapter {
 	Date finaldate = calendar.getTime();
 	String smsDate = finaldate.toString();
 
-	listDate.setText(smsDate);
+	
+	
+	holder.listBody.setText(messageSnippet);
+	holder.listWithWho.setText(contactName);
+	holder.listDate.setText(smsDate);
+	
+	holder.listQuickContactBadge.assignContactFromPhone(contactPhone, false);
+	holder.listQuickContactBadge.setImageBitmap(getFacebookPhoto(contactPhone));
 
-	querrySmsDB();
-	querryPeople();
-	
-	listWithWho.setText(contactName);
-
-	listQuickContactBadge.assignContactFromPhone(contactPhone, false);
-	
-	listQuickContactBadge.setImageBitmap(getFacebookPhoto(contactPhone));
-	
-	
 	return vi;
     }
 
     public void querryConversationDB(int position) {
 
 	Log.d("ConversationAdapter", "querryConversationDB() CALLED ");
-
+	final String[] projection = new String[] { "snippet", "message_count","has_attachment","read","date","_id"};
 	Uri uri = Uri.parse("content://mms-sms/conversations?simple=true");
-	Cursor cur = activity.getApplicationContext().getContentResolver().query(uri, null, null, null, "date DESC");
+	Cursor cur = activity.getApplicationContext().getContentResolver().query(uri, projection, null, null, "date DESC");
 	cur.moveToPosition(position);
 
 	messageSnippet = cur.getString(cur.getColumnIndex("snippet"));
@@ -128,24 +135,16 @@ public class ConversationAdapter extends BaseAdapter {
 
     }
 
-   
-
     public void querryPeople() {
-	final String[] PROJECTION = new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.PHOTO_URI };
+	final String[] PROJECTION = new String[] { PhoneLookup.DISPLAY_NAME};
 	Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, contactPhone);
-	Cursor cur = activity.getContentResolver().query(personUri, null, null, null, null);
+	Cursor cur = activity.getContentResolver().query(personUri,PROJECTION, null, null, null);
 	if (cur.moveToFirst()) {
-	    int nameIdx = cur.getColumnIndex(PhoneLookup.DISPLAY_NAME);
-	    int photo = cur.getColumnIndex(PhoneLookup.PHOTO_URI);
+	    int nameIdx = cur.getColumnIndex(PhoneLookup.DISPLAY_NAME); 
 	    contactName = cur.getString(nameIdx);
-	    // listQuickContactBadge.setImageURI(photo);
 	} else {
 	    contactName = contactPhone;
-
-	}//
-	 // for (int i = 0; i < cur.getColumnCount(); i++) {
-	 //Log.v("column names from phones", cur.getColumnName(i).toString());
-	 //  }
+	}
 	cur.close();
     }
 
@@ -170,7 +169,7 @@ public class ConversationAdapter extends BaseAdapter {
 		return BitmapFactory.decodeStream(input);
 	    }
 	} else {
-	 // contact nie wiem jaki - jêsli uri jest null?
+	    // contact nie wiem jaki - jêsli uri jest null?
 	    Bitmap defaultPhoto = BitmapFactory.decodeResource(activity.getResources(), android.R.drawable.ic_menu_report_image);
 	    return defaultPhoto;
 	}

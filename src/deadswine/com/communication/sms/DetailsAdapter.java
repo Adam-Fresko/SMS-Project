@@ -70,29 +70,29 @@ public class DetailsAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 	View vi = convertView;
-	if (convertView == null)
-	    vi = inflater.inflate(R.layout.specific_conversation_row, null);
+	querryConversationDB();
+	querrySmsDB(position);
+	if (convertView == null) {
 
+	    if (messageType.equals("1")) {
+		vi = inflater.inflate(R.layout.specific_conversation_row, null);
+		//   secondLayout.setBackgroundResource(R.drawable.msgbox_other);
+	    } else if (messageType.equals("2")) {
+		vi = inflater.inflate(R.layout.specific_conversation_row_self, null);
+		// secondLayout.setBackgroundResource(R.drawable.msgbox_self);
+	    }
+	}
 	listQuickContactBadge = (QuickContactBadge) vi.findViewById(R.id.quickContactBadge);
 	listWithWho = (TextView) vi.findViewById(R.id.WithWho);
 	listBody = (TextView) vi.findViewById(R.id.smsBody);
 	listDate = (TextView) vi.findViewById(R.id.date);
 	secondLayout = (RelativeLayout) vi.findViewById(R.id.Layout2);
 
-	querryConversationDB();
-	querrySmsDB(position);
-
 	Long timestamp = Long.parseLong(messageDate);
 	Calendar calendar = Calendar.getInstance();
 	calendar.setTimeInMillis(timestamp);
 	Date finaldate = calendar.getTime();
 	String smsDate = finaldate.toString();
-
-	if (messageType.equals("1")) {
-	    secondLayout.setBackgroundResource(R.drawable.msgbox_other);
-	} else if (messageType.equals("2")) {
-	    secondLayout.setBackgroundResource(R.drawable.msgbox_self);
-	}
 
 	//
 	listBody.setText(messageSnippet);
