@@ -23,15 +23,15 @@ public class DataGetters {
 	    String id = cur.getString(cur.getColumnIndex("_id"));
 	    String recipient_id = cur.getString(cur.getColumnIndex("recipient_ids"));
 
-	    Log.v("STRING _id = ", id);
-	    Log.v("STRING recipient_id = ", recipient_id);
+	   // Log.v("STRING _id = ", id);
+	   // Log.v("STRING recipient_id = ", recipient_id);
 
 	    sms.add(snippet);
 	}
 	// prints columns names
-	for (int i = 0; i < cur.getColumnCount(); i++) {
-	    Log.v("column names from sms", cur.getColumnName(i).toString());
-	}
+	//for (int i = 0; i < cur.getColumnCount(); i++) {
+	 //   Log.v("column names from sms", cur.getColumnName(i).toString());
+	//}
 
 	return sms;
     }
@@ -62,9 +62,9 @@ public class DataGetters {
 	    sms.add(body);
 	}
 	// prints columns names
-	for (int i = 0; i < cur.getColumnCount(); i++) {
-	    Log.v("column names from details activity", cur.getColumnName(i).toString());
-	}
+	//for (int i = 0; i < cur.getColumnCount(); i++) {
+	 //   Log.v("column names from details activity", cur.getColumnName(i).toString());
+	//}
 	cur.close();
 
 	return sms;

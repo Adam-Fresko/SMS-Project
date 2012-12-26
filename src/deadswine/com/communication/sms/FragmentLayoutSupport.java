@@ -17,6 +17,7 @@
 package deadswine.com.communication.sms;
 
 import java.util.List;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,10 +49,12 @@ import com.actionbarsherlock.widget.SearchView;
  * landscape.
  */
 public class FragmentLayoutSupport extends SherlockFragmentActivity {
-    public static int      THEME  = R.style.Theme_Sherlock;
+   
+    public static int      THEME	  = R.style.Theme_Sherlock;
     private static Context context;
     public static String   thread_ids;
-    public static int      isOpen = 0;
+    public static int      isOpen	 = 0;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,8 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
 
 	isOpen = 1;
+
+	
     }
 
     @Override
@@ -82,11 +88,9 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
     protected void onPostResume() {
 	super.onPostResume();
 	Log.d("FragmentLayoutSupport", "CALLED -- onPostResume()");
-	
+
 	new ReceiverClass().execute("");
     }
-    
-    
 
     public static Context getAppContext() {
 	return FragmentLayoutSupport.context;
@@ -132,13 +136,13 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		return;
 
 	    }
-	    
+
 	    getSupportActionBar().setDisplayShowTitleEnabled(false); // hide title
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false); // set if home icon is navigation
-		getSupportActionBar().setDisplayUseLogoEnabled(false); // donot use logo
-		getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
-	    
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(false); // set if home icon is navigation
+	    getSupportActionBar().setDisplayUseLogoEnabled(false); // donot use logo
+	    getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
+
 	    if (savedInstanceState == null) {
 		// During initial setup, plug in the details fragment.
 		DetailsFragment details = new DetailsFragment();
@@ -146,27 +150,27 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		getSupportFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
 	    }
 	}
-	
+
 	// top action bar menu
-	    @Override
-	    public boolean onCreateOptionsMenu(Menu menu) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Create the search view
-		SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
-		searchView.setQueryHint("Search Recipient");
+	    // Create the search view
+	    SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
+	    searchView.setQueryHint("Search Recipient");
 
-		menu.add("Compose").setIcon(R.drawable.ic_compose).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-		menu.add("Search").setIcon(R.drawable.ic_search).setActionView(searchView).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+	    menu.add("Compose").setIcon(R.drawable.ic_compose).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	    menu.add("Search").setIcon(R.drawable.ic_search).setActionView(searchView).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
-		SubMenu sub = menu.addSubMenu("Theme");
-		sub.add(0, R.style.Theme_Sherlock, 0, "Default");
-		sub.add(0, R.style.Theme_Sherlock_Light, 0, "Light");
-		sub.add(0, R.style.Theme_Sherlock_Light_DarkActionBar, 0, "Light (Dark Action Bar)");
-		sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	    SubMenu sub = menu.addSubMenu("Theme");
+	    sub.add(0, R.style.Theme_Sherlock, 0, "Default");
+	    sub.add(0, R.style.Theme_Sherlock_Light, 0, "Light");
+	    sub.add(0, R.style.Theme_Sherlock_Light_DarkActionBar, 0, "Light (Dark Action Bar)");
+	    sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		return super.onCreateOptionsMenu(menu);
-	    }
-	
+	    return super.onCreateOptionsMenu(menu);
+	}
+
     }
 
     /**
@@ -195,8 +199,6 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    adapter = new ConversationAdapter(activity, msgList);
 
 	    setListAdapter(adapter);
-	    
-	
 
 	    // Check to see if we have a frame in which to embed the details
 	    // fragment directly in the containing UI.

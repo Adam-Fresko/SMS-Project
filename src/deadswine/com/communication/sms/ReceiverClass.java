@@ -15,8 +15,8 @@ public class ReceiverClass extends AsyncTask<String, Void, String> {
 	try {
 	    
 	    Log.d("ReceiverClass", "ReceiverClass CALLED");
-	    Thread.sleep(1000);
-	    Log.d("ReceiverClass", "ReceiverClass slept 2000");
+	    Thread.sleep(500);
+	    Log.d("ReceiverClass", "ReceiverClass slept 1000");
 	} catch (InterruptedException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
