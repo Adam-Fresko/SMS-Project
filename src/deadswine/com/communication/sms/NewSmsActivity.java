@@ -1,6 +1,8 @@
 package deadswine.com.communication.sms;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -17,7 +19,7 @@ public class NewSmsActivity extends SherlockFragmentActivity {
 	    setContentView(R.layout.create_sms_activity_layout);
 
 	  getSupportActionBar().setDisplayShowTitleEnabled(false); // hide title
-	   getSupportActionBar().setDisplayHomeAsUpEnabled(false); // set if home icon is navigation
+	   getSupportActionBar().setDisplayHomeAsUpEnabled(true); // set if home icon is navigation
 	    getSupportActionBar().setDisplayUseLogoEnabled(false); // donot use logo
 	   getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
 	    
@@ -29,19 +31,36 @@ public class NewSmsActivity extends SherlockFragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 	    // Create the search view
-	    SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
-	    searchView.setQueryHint("Search Recipient");
+	   // SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
+	   // searchView.setQueryHint("Search Recipient");
 
-	    menu.add("Compose").setIcon(R.drawable.ic_compose).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-	    menu.add("Search").setIcon(R.drawable.ic_search).setActionView(searchView).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+	   // menu.add("Compose").setIcon(R.drawable.ic_compose).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	    //menu.add("Search").setIcon(R.drawable.ic_search).setActionView(searchView).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
 
-	    SubMenu sub = menu.addSubMenu("Theme");
-	    sub.add(0, R.style.Theme_Sherlock, 0, "Default");
-	    sub.add(0, R.style.Theme_Sherlock_Light, 0, "Light");
-	    sub.add(0, R.style.Theme_Sherlock_Light_DarkActionBar, 0, "Light (Dark Action Bar)");
-	    sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+	   // SubMenu sub = menu.addSubMenu("Theme");
+	   // sub.add(0, R.style.Theme_Sherlock, 0, "Default");
+	   // sub.add(0, R.style.Theme_Sherlock_Light, 0, "Light");
+	   // sub.add(0, R.style.Theme_Sherlock_Light_DarkActionBar, 0, "Light (Dark Action Bar)");
+	   // sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
 	    return super.onCreateOptionsMenu(menu);
 	}
+	
+	@Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+
+	    switch (item.getItemId()) {
+	        case android.R.id.home:
+	            // app icon in action bar clicked; go home
+	            Intent intent = new Intent(this, FragmentLayoutSupport.class);
+	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+
+		
+	    }
 
 }

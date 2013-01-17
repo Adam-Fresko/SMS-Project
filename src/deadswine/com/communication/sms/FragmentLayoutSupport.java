@@ -126,10 +126,10 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	if (item.getTitle() == "Compose") {
 	    Log.d("cccccccccccccccccccccccccccccc", "compose");
 	    Intent intent = new Intent();
-		intent.setClass(this, NewSmsActivity.class);
-		
-		startActivity(intent);
-	 
+	    intent.setClass(this, NewSmsActivity.class);
+
+	    startActivity(intent);
+
 	}
 
 	return super.onOptionsItemSelected(item);
@@ -142,7 +142,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
      */
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static class TitlesFragment extends SherlockListFragment {
-	static boolean		    mDualPane;
+	static boolean	     mDualPane;
 	int			mCurCheckPosition = 0;
 
 	static ConversationAdapter adapter;
@@ -258,8 +258,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    }
 
 	    getSupportActionBar().setDisplayShowTitleEnabled(false); // hide title
-
-	    getSupportActionBar().setDisplayHomeAsUpEnabled(false); // set if home icon is navigation
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(true); // set if home icon is navigation
 	    getSupportActionBar().setDisplayUseLogoEnabled(false); // donot use logo
 	    getSupportActionBar().setDisplayShowHomeEnabled(true); // hide home icon
 
@@ -289,6 +288,22 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
 	    return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+	    switch (item.getItemId()) {
+		case android.R.id.home:
+		    // app icon in action bar clicked; go home
+		    Intent intent = new Intent(this, FragmentLayoutSupport.class);
+		    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		    startActivity(intent);
+		    return true;
+		default:
+		    return super.onOptionsItemSelected(item);
+	    }
+
 	}
 
     }
@@ -355,10 +370,5 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   
-
-  
-
-   
 
 }

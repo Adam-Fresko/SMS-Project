@@ -121,9 +121,9 @@ public class DetailsAdapter extends BaseAdapter {
 	    messageSnippet = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("body"));
 	    messageType = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("type"));
 
-	    Log.d(" sms details ", " person=" + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("person")) + "  protocol= " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("protocol")) + " status = " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("status")) + "  type= " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("type")) + " ");
+	  //  Log.d(" sms details ", " person=" + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("person")) + "  protocol= " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("protocol")) + " status = " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("status")) + "  type= " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("type")) + " ");
 
-	    Log.d("querrySmsDB() called ", " cur position" + curQuerrySmsDB.getPosition());
+	   // Log.d("querrySmsDB() called ", " cur position" + curQuerrySmsDB.getPosition());
 	}
 
     }

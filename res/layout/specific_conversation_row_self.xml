@@ -11,20 +11,11 @@
 
     <!-- With Who Conversation -->
 
-<QuickContactBadge
-    android:id="@+id/quickContactBadge1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentRight="true"
-    android:layout_alignTop="@+id/Layout2"
-    android:src="@drawable/icon" />
-
 <RelativeLayout
     android:id="@+id/Layout2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:layout_toLeftOf="@+id/quickContactBadge1"
     android:background="@drawable/msgbox_self" >
 
     <TextView
