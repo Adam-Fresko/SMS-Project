@@ -19,6 +19,7 @@ package deadswine.com.communication.sms;
 import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -35,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -49,12 +51,15 @@ import com.actionbarsherlock.widget.SearchView;
  * landscape.
  */
 public class FragmentLayoutSupport extends SherlockFragmentActivity {
-   
-    public static int      THEME	  = R.style.Theme_Sherlock;
+
+    public static int      THEME      = R.style.Theme_Sherlock;
     private static Context context;
     public static String   thread_ids;
-    public static int      isOpen	 = 0;
-    
+    public static int      isOpen     = 0;
+
+    public static String   tagDetails = "tagDetails";
+    public static String   tagTitles  = "tagTitles";
+    public static String   tagSms     = "tagTitles";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +77,6 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	isOpen = 1;
 
-	
     }
 
     @Override
@@ -116,6 +120,122 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+	if (item.getTitle() == "Compose") {
+	    Log.d("cccccccccccccccccccccccccccccc", "compose");
+	    Intent intent = new Intent();
+		intent.setClass(this, NewSmsActivity.class);
+		
+		startActivity(intent);
+	 
+	}
+
+	return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * This is the "top-level" fragment, showing a list of items that the user
+     * can pick. Upon picking an item, it takes care of displaying the data to
+     * the user as appropriate based on the currrent UI layout.
+     */
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static class TitlesFragment extends SherlockListFragment {
+	static boolean		    mDualPane;
+	int			mCurCheckPosition = 0;
+
+	static ConversationAdapter adapter;
+
+	static Activity	    activity;
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+	    super.onActivityCreated(savedInstanceState);
+
+	    activity = getActivity();
+	    DataGetters dataGetters = new DataGetters();
+
+	    List<String> msgList = dataGetters.getCONVERSATIONS(activity.getApplicationContext());
+
+	    adapter = new ConversationAdapter(activity, msgList);
+
+	    setListAdapter(adapter);
+
+	    // Check to see if we have a frame in which to embed the details
+	    // fragment directly in the containing UI.
+	    View detailsFrame = getActivity().findViewById(R.id.details);
+
+	    mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+
+	    if (savedInstanceState != null) {
+		// Restore last state for checked position.
+		mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
+	    }
+
+	    if (mDualPane) {
+		// In dual-pane mode, the list view highlights the selected
+		// item.
+		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		// Make sure our UI is in the correct state.
+		showDetails(mCurCheckPosition);
+
+	    }
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putInt("curChoice", mCurCheckPosition);
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+
+	    showDetails(position);
+	}
+
+	/**
+	 * Helper function to show the details of a selected item, either by
+	 * displaying a fragment in-place in the current UI, or starting a whole
+	 * new activity in which it is displayed.
+	 */
+	void showDetails(int index) {
+	    mCurCheckPosition = index;
+
+	    if (mDualPane) {
+		// We can display everything in-place with fragments, so update
+		// the list to highlight the selected item and show the data.
+		getListView().setItemChecked(index, true);
+
+		// Check what fragment is currently shown, replace if needed.
+		DetailsFragment details = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
+		if (details == null || details.getShownIndex() != index) {
+		    // Make new fragment to show this selection.
+		    details = DetailsFragment.newInstance(index);
+
+		    // Execute a transaction, replacing any existing fragment
+		    // with this one inside the frame.
+		    FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+		    ft.replace(R.id.details, details);
+
+		    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		    ft.commit();
+		}
+
+	    } else {
+		// Otherwise we need to launch a new activity to display
+		// the dialog fragment with selected text.
+		Intent intent = new Intent();
+		intent.setClass(getActivity(), DetailsActivity.class);
+		intent.putExtra("index", index);
+		startActivity(intent);
+	    }
+	}
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * This is a secondary activity, to show what the user has selected when the
      * screen is not large enough to show it all in one activity.
@@ -173,103 +293,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
     }
 
-    /**
-     * This is the "top-level" fragment, showing a list of items that the user
-     * can pick. Upon picking an item, it takes care of displaying the data to
-     * the user as appropriate based on the currrent UI layout.
-     */
-
-    public static class TitlesFragment extends SherlockListFragment {
-	boolean		    mDualPane;
-	int			mCurCheckPosition = 0;
-
-	static ConversationAdapter adapter;
-
-	static Activity	    activity;
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-	    super.onActivityCreated(savedInstanceState);
-
-	    activity = getActivity();
-	    DataGetters dataGetters = new DataGetters();
-
-	    List<String> msgList = dataGetters.getCONVERSATIONS(activity.getApplicationContext());
-
-	    adapter = new ConversationAdapter(activity, msgList);
-
-	    setListAdapter(adapter);
-
-	    // Check to see if we have a frame in which to embed the details
-	    // fragment directly in the containing UI.
-	    View detailsFrame = getActivity().findViewById(R.id.details);
-	    mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
-
-	    if (savedInstanceState != null) {
-		// Restore last state for checked position.
-		mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-	    }
-
-	    if (mDualPane) {
-		// In dual-pane mode, the list view highlights the selected
-		// item.
-		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		// Make sure our UI is in the correct state.
-		showDetails(mCurCheckPosition);
-
-	    }
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-	    super.onSaveInstanceState(outState);
-	    outState.putInt("curChoice", mCurCheckPosition);
-	}
-
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-
-	    showDetails(position);
-	}
-
-	/**
-	 * Helper function to show the details of a selected item, either by
-	 * displaying a fragment in-place in the current UI, or starting a whole
-	 * new activity in which it is displayed.
-	 */
-	void showDetails(int index) {
-	    mCurCheckPosition = index;
-
-	    if (mDualPane) {
-		// We can display everything in-place with fragments, so update
-		// the list to highlight the selected item and show the data.
-		getListView().setItemChecked(index, true);
-
-		// Check what fragment is currently shown, replace if needed.
-		DetailsFragment details = (DetailsFragment) getFragmentManager().findFragmentById(R.id.details);
-		if (details == null || details.getShownIndex() != index) {
-		    // Make new fragment to show this selection.
-		    details = DetailsFragment.newInstance(index);
-
-		    // Execute a transaction, replacing any existing fragment
-		    // with this one inside the frame.
-		    FragmentTransaction ft = getFragmentManager().beginTransaction();
-		    ft.replace(R.id.details, details);
-		    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		    ft.commit();
-		}
-
-	    } else {
-		// Otherwise we need to launch a new activity to display
-		// the dialog fragment with selected text.
-		Intent intent = new Intent();
-		intent.setClass(getActivity(), DetailsActivity.class);
-		intent.putExtra("index", index);
-		startActivity(intent);
-	    }
-	}
-    }
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * This is the secondary fragment, displaying the details of a particular
      * item.
@@ -329,5 +353,12 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	}
 
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
+
+  
+
+   
 
 }

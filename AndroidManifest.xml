@@ -32,7 +32,8 @@
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -40,30 +41,35 @@
     <application
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/application_name"
-         >
-       <activity
+        android:label="@string/application_name" >
+        <activity
             android:name=".FragmentLayoutSupport"
             android:label="@string/application_name" >
             <intent-filter>
-             
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
-           
             </intent-filter>
         </activity>
-       <activity android:name=".FragmentLayoutSupport$DetailsActivity" />
+        <activity android:name=".FragmentLayoutSupport$DetailsActivity" />
        
-        <receiver android:name="SMSReceiver" android:enabled="true">
-      <intent-filter>
-        <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-      </intent-filter>
-</receiver>
+        <activity android:name=".SmsActivity" />
 
-        
-       
+        <receiver
+            android:name="SMSReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".NewSmsActivity"
+            android:label="@string/application_name" >
+        </activity>
+        <!-- <activity android:name=".NewSmsActivity$" /> -->
+
     </application>
 
 </manifest>
