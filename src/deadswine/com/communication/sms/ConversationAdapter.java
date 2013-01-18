@@ -45,11 +45,8 @@ public class ConversationAdapter extends BaseAdapter {
 	msgList = data;
 	inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	tablicaData = new String[msgList.size()][5];
-
     }
     
-   
-
     public static class ViewHolder {
 	public TextView	  listDate, listBody, listWithWho;
 	public QuickContactBadge listQuickContactBadge;

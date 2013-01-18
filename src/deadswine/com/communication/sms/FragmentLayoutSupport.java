@@ -352,18 +352,23 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		// the view hierarchy; it would just never be used.
 		return null;
 	    }
+	    
 	    intWitchConversationShown = getShownIndex();
 	    activity = getActivity();
 	    DataGetters dataGetters = new DataGetters();
 
-	    ListView coversacja = new ListView(getActivity());
+	   
 	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), getShownIndex());
-
-	    adapter = new DetailsAdapter(activity, msgList);
-	    coversacja.setAdapter(adapter);
-	    coversacja.setTranscriptMode(2);
-
-	    return coversacja;
+	  //  ListView coversacja = new ListView(getActivity());
+	  //  adapter = new DetailsAdapter(activity, msgList);
+	 //   coversacja.setAdapter(adapter);
+	 //   coversacja.setSelection(msgList.size());
+	  //  coversacja.setTranscriptMode(2);
+	    //return coversacja;
+	    
+	    
+	    return inflater.inflate(R.layout.test, container, false);
+	    
 
 	}
 

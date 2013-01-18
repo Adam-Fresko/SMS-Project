@@ -952,7 +952,7 @@ containing a value of this type.
     public static final class id {
         public static final int Layout2=0x7f050043;
         public static final int WithWho=0x7f050035;
-        public static final int a_item=0x7f050045;
+        public static final int a_item=0x7f050046;
         public static final int abs__action_bar=0x7f050022;
         public static final int abs__action_bar_container=0x7f050021;
         public static final int abs__action_bar_subtitle=0x7f050011;
@@ -994,25 +994,26 @@ containing a value of this type.
         public static final int abs__titleDivider=0x7f05001c;
         public static final int abs__up=0x7f05000b;
         public static final int arrow=0x7f050038;
-        public static final int b_item=0x7f050046;
+        public static final int b_item=0x7f050047;
         public static final int btnADD=0x7f05003a;
         public static final int btnAttatch=0x7f05003c;
         public static final int btnSEND=0x7f05003e;
-        public static final int c_item=0x7f050047;
-        public static final int d_item=0x7f050048;
+        public static final int c_item=0x7f050048;
+        public static final int d_item=0x7f050049;
         public static final int date=0x7f050037;
         public static final int details=0x7f050040;
         public static final int disableHome=0x7f050009;
-        public static final int e_item=0x7f050049;
+        public static final int e_item=0x7f05004a;
         public static final int editSMS=0x7f05003b;
+        public static final int editText1=0x7f050044;
         public static final int editTextAddContact=0x7f050039;
         public static final int edit_query=0x7f050027;
-        public static final int excl_item=0x7f05004d;
-        public static final int f_item=0x7f05004a;
-        public static final int g_item=0x7f05004b;
-        public static final int h_item=0x7f05004c;
+        public static final int excl_item=0x7f05004e;
+        public static final int f_item=0x7f05004b;
+        public static final int g_item=0x7f05004c;
+        public static final int h_item=0x7f05004d;
         public static final int homeAsUp=0x7f050006;
-        public static final int invisible_item=0x7f050044;
+        public static final int invisible_item=0x7f050045;
         public static final int list=0x7f050041;
         public static final int listMode=0x7f050002;
         public static final int normal=0x7f050001;
@@ -1067,6 +1068,7 @@ containing a value of this type.
         public static final int sms_layout_support=0x7f03001f;
         public static final int specific_conversation_row=0x7f030020;
         public static final int specific_conversation_row_self=0x7f030021;
+        public static final int test=0x7f030022;
     }
     public static final class menu {
         public static final int shortcuts=0x7f0c0000;
