@@ -37,13 +37,18 @@ public class ConversationAdapter extends BaseAdapter {
     public String		 photo_id;
     public String		 contactImg;
     public String		 conversationID;
+    
+    public static String[][]	     tablicaData;   // 0 = listWithWho // 1 = listBody  // 2 = listDate // 3 = listQuickContactBadge
 
     public ConversationAdapter(Activity a, List<String> data) {
 	activity = a;
 	msgList = data;
 	inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	tablicaData = new String[msgList.size()][5];
 
     }
+    
+   
 
     public static class ViewHolder {
 	public TextView	  listDate, listBody, listWithWho;
@@ -56,6 +61,7 @@ public class ConversationAdapter extends BaseAdapter {
 	public String	    photo_id;
 	public String	    contactImg;
 	public String	    conversationID;
+	
     }
 
     public int getCount() {
@@ -88,9 +94,19 @@ public class ConversationAdapter extends BaseAdapter {
 	} else {
 	    holder = (ViewHolder) vi.getTag();
 	}
-	holder.position = position;
-	new fillConversation(position, holder).execute("");
+
 	
+	    holder.position = position;
+	    
+	    if(tablicaData[position][0]==null){
+		 new fillConversation(position, holder).execute("");
+	    }else {
+		 holder.listWithWho.setText(tablicaData[position][0]);
+		holder.listBody.setText(tablicaData[position][1]);
+		holder.listDate.setText(tablicaData[position][2]);
+	    }
+	    
+
 	return vi;
     }
 
@@ -142,11 +158,10 @@ public class ConversationAdapter extends BaseAdapter {
 	private ViewHolder mHolder;
 
 	public fillConversation(int position, ViewHolder holder) {
-	    Log.d(" illConversation  CALLED", " position" + position);
+	    
 	    mPosition = position;
 	    mHolder = holder;
-	    Log.d(" illConversation  CALLED", " mPosition =" + mPosition);
-	    Log.d(" illConversation  CALLED", " mHolder.position" + mHolder.position);
+	  
 
 	}
 
@@ -154,16 +169,20 @@ public class ConversationAdapter extends BaseAdapter {
 	protected void onPostExecute(Object result) {
 
 	    if (mHolder.position == mPosition) {
-		Log.d(" onPostExecute  ", " mHolder.position" + mHolder.position);
+		
 		Long timestamp = Long.parseLong(mHolder.messageDate);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(timestamp);
 		Date finaldate = calendar.getTime();
 		String smsDate = finaldate.toString();
-
-		mHolder.listBody.setText(mHolder.messageSnippet);
+		
 		mHolder.listWithWho.setText(mHolder.contactName);
+		mHolder.listBody.setText(mHolder.messageSnippet);
 		mHolder.listDate.setText(smsDate);
+		
+		tablicaData[mHolder.position][0] = mHolder.contactName;
+		tablicaData[mHolder.position][1] = mHolder.messageSnippet;
+		tablicaData[mHolder.position][2] = smsDate;
 
 		mHolder.listQuickContactBadge.assignContactFromPhone(mHolder.contactPhone, false);
 		new ThumbnailTask(mHolder.position, mHolder.contactPhone, mHolder).execute("");
@@ -172,7 +191,7 @@ public class ConversationAdapter extends BaseAdapter {
 
 	@Override
 	protected Object doInBackground(Object... params) {
-	    Log.d(" doInBackground ", " mPosition" + mPosition);
+	   
 	    querryConversationDB(mPosition);
 	    querrySmsDB();
 	    querryPeople();
@@ -182,7 +201,7 @@ public class ConversationAdapter extends BaseAdapter {
 
 	public void querryConversationDB(int position) {
 
-	    Log.d("fillConversation", "querryConversationDB() CALLED ");
+	   
 	    final String[] projection = new String[] { "snippet", "message_count", "has_attachment", "read", "date", "_id" };
 	    Uri uri = Uri.parse("content://mms-sms/conversations?simple=true");
 	    Cursor cur = activity.getApplicationContext().getContentResolver().query(uri, projection, null, null, "date DESC");
@@ -198,7 +217,7 @@ public class ConversationAdapter extends BaseAdapter {
 	}
 
 	public void querrySmsDB() {
-	    Log.d("fillConversation", "querrySmsDB() CALLED ");
+	   
 
 	    final String[] projection = new String[] { "address" };
 	    String selection = "thread_id = " + mHolder.conversationID;
@@ -211,7 +230,7 @@ public class ConversationAdapter extends BaseAdapter {
 	}
 
 	public void querryPeople() {
-	    Log.d("fillConversation", "querryPeople() CALLED ");
+	   
 	    final String[] PROJECTION = new String[] { PhoneLookup.DISPLAY_NAME };
 	    Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, mHolder.contactPhone);
 	    Cursor cur = activity.getContentResolver().query(personUri, PROJECTION, null, null, null);
