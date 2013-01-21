@@ -42,7 +42,7 @@
          android:orientation="horizontal" >
 
          <EditText
-             android:id="@+id/editSMS"
+             android:id="@+id/editTextSMS"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:layout_marginLeft="5dp"

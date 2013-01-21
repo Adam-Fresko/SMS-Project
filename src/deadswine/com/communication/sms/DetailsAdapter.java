@@ -72,16 +72,21 @@ public class DetailsAdapter extends BaseAdapter {
 	View vi = convertView;
 	querryConversationDB();
 	querrySmsDB(position);
+	Log.d("xxxxxxxxxxx", "POSITION ====="+position +" messageType ==== "+messageType);
 	if (convertView == null) {
 
-	    if (messageType.equals("1")) {
+	    
+	}
+	if (messageType.equals("1")) {
 		vi = inflater.inflate(R.layout.specific_conversation_row, null);
 		//   secondLayout.setBackgroundResource(R.drawable.msgbox_other);
 	    } else if (messageType.equals("2")) {
 		vi = inflater.inflate(R.layout.specific_conversation_row_self, null);
 		// secondLayout.setBackgroundResource(R.drawable.msgbox_self);
+	    }else if (messageType.equals("6")){
+		vi = inflater.inflate(R.layout.specific_conversation_row_error, null);
 	    }
-	}
+	
 	listQuickContactBadge = (QuickContactBadge) vi.findViewById(R.id.quickContactBadge);
 	listWithWho = (TextView) vi.findViewById(R.id.WithWho);
 	listBody = (TextView) vi.findViewById(R.id.smsBody);
@@ -105,7 +110,7 @@ public class DetailsAdapter extends BaseAdapter {
 	return vi;
     }
 
-    public void querrySmsDB(int position) {
+    public void querrySmsDB(int position ) {
 	Log.d("Details Adapter", "querrySmsDB() called");
 
 	if (testXX == false) {

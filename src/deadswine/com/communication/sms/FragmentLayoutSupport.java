@@ -356,7 +356,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    intWitchConversationShown = getShownIndex();
 	    activity = getActivity();
 	    DataGetters dataGetters = new DataGetters();
-
+	    
 	   
 	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), getShownIndex());
 	  //  ListView coversacja = new ListView(getActivity());
@@ -365,10 +365,17 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	 //   coversacja.setSelection(msgList.size());
 	  //  coversacja.setTranscriptMode(2);
 	    //return coversacja;
+	    View view = inflater.inflate(R.layout.test,
+                    container, false);
 	    
-	    
-	    return inflater.inflate(R.layout.test, container, false);
-	    
+	    ListView sd = (ListView) view.findViewById(R.id.listViewDetail);
+	    adapter = new DetailsAdapter(activity, msgList);
+	    sd.setAdapter(adapter);
+	   sd.setStackFromBottom(true);
+	 // sd.setSelection(msgList.size());
+	   // sd.setTranscriptMode(2);
+	  //  return  inflater.inflate(R.layout.test, container, false);
+	    return view;
 
 	}
 
