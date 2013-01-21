@@ -53,7 +53,7 @@ public class DetailsAdapter extends BaseAdapter {
 	querryConversationDB();
 
 	testXX = false;
-	Log.d("DetailsAdapter", "DetailsAdapter CALLED");
+	
     }
 
     public int getCount() {
@@ -70,9 +70,9 @@ public class DetailsAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 	View vi = convertView;
-	querryConversationDB();
+	//querryConversationDB();
 	querrySmsDB(position);
-	Log.d("xxxxxxxxxxx", "POSITION ====="+position +" messageType ==== "+messageType);
+	
 	if (convertView == null) {
 
 	    
@@ -103,7 +103,7 @@ public class DetailsAdapter extends BaseAdapter {
 	listBody.setText(messageSnippet);
 	listDate.setText(smsDate);
 
-	Log.d("getView()", "position =" + position);
+	
 
 	//listQuickContactBadge.assignContactFromPhone(contactPhone, false);
 
@@ -111,11 +111,11 @@ public class DetailsAdapter extends BaseAdapter {
     }
 
     public void querrySmsDB(int position ) {
-	Log.d("Details Adapter", "querrySmsDB() called");
+	
 
 	if (testXX == false) {
 	    curQuerrySmsDB = activity.getApplicationContext().getContentResolver().query(smsUri, null, ConversationSelection, null, "date ASC");
-	    Log.d("querrySmsDB() called ", " cur count" + curQuerrySmsDB.getCount());
+	   
 	    testXX = true;
 	}
 
@@ -126,15 +126,12 @@ public class DetailsAdapter extends BaseAdapter {
 	    messageSnippet = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("body"));
 	    messageType = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("type"));
 
-	  //  Log.d(" sms details ", " person=" + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("person")) + "  protocol= " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("protocol")) + " status = " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("status")) + "  type= " + curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("type")) + " ");
-
-	   // Log.d("querrySmsDB() called ", " cur position" + curQuerrySmsDB.getPosition());
 	}
 
     }
 
     public void querryConversationDB() {
-	Log.d("Details Adapter", "querryConversationDB() called");
+	
 
 	Uri uri = Uri.parse("content://mms-sms/conversations?simple=true");
 
@@ -144,7 +141,7 @@ public class DetailsAdapter extends BaseAdapter {
 	String id = cursor.getString(cursor.getColumnIndex("_id"));
 	String recipinet_id = cursor.getString(cursor.getColumnIndex("recipient_ids"));
 	Log.d("recipient ids", recipinet_id);
-	ConversationSelection = "thread_id = " + id; // + "63"
+	ConversationSelection = "thread_id = " + id; 
 	cursor.close();
     }
 

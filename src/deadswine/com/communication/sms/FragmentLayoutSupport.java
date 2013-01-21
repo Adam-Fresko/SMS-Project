@@ -17,26 +17,20 @@
 package deadswine.com.communication.sms;
 
 import java.util.List;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -61,6 +55,13 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
     public static String   tagTitles  = "tagTitles";
     public static String   tagSms     = "tagTitles";
 
+    /////////////////////
+    static ListView	detailsListView;
+    static Button	  detailsBtnSend;
+    static EditText	detailsEditText;
+    static String	  adr;
+
+    //////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	setTheme(THEME); // Used for theme switching in samples
@@ -314,7 +315,8 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
      * item.
      */
 
-    public static class DetailsFragment extends SherlockFragment {
+    public static class DetailsFragment extends SherlockFragment implements OnClickListener {
+
 	/**
 	 * Create a new instance of DetailsFragment, initialized to show the
 	 * text at 'index'.
@@ -352,31 +354,44 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		// the view hierarchy; it would just never be used.
 		return null;
 	    }
-	    
+
 	    intWitchConversationShown = getShownIndex();
 	    activity = getActivity();
 	    DataGetters dataGetters = new DataGetters();
-	    
-	   
+
 	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), getShownIndex());
-	  //  ListView coversacja = new ListView(getActivity());
-	  //  adapter = new DetailsAdapter(activity, msgList);
-	 //   coversacja.setAdapter(adapter);
-	 //   coversacja.setSelection(msgList.size());
-	  //  coversacja.setTranscriptMode(2);
-	    //return coversacja;
-	    View view = inflater.inflate(R.layout.test,
-                    container, false);
-	    
-	    ListView sd = (ListView) view.findViewById(R.id.listViewDetail);
+	    adr = dataGetters.Adress;
+	    View view = inflater.inflate(R.layout.test, container, false);
+
+	    detailsListView = (ListView) view.findViewById(R.id.listViewDetail);
 	    adapter = new DetailsAdapter(activity, msgList);
-	    sd.setAdapter(adapter);
-	   sd.setStackFromBottom(true);
-	 // sd.setSelection(msgList.size());
-	   // sd.setTranscriptMode(2);
-	  //  return  inflater.inflate(R.layout.test, container, false);
+	    detailsListView.setAdapter(adapter);
+	    detailsListView.setStackFromBottom(true);
+
+	    detailsBtnSend = (Button) view.findViewById(R.id.detailsBtnSend);
+	    detailsBtnSend.setOnClickListener(this);
+	    detailsEditText = (EditText) view.findViewById(R.id.detailsEditText);
 	    return view;
 
+	}
+
+	@Override
+	public void onClick(View v) {
+
+	    switch (v.getId()) {
+		case R.id.detailsBtnSend:
+
+		    // DataGetters dataGetters = new DataGetters();
+		    SmsClass smsClass = new SmsClass();
+		   // smsClass.sendSMS(adr, detailsEditText.getText().toString());
+		    smsClass.sendS(adr, detailsEditText.getText().toString());
+		    detailsEditText.setText("");
+		    detailsEditText.clearFocus();
+
+		   // adapter.notifyDataSetChanged();
+		    
+		    break;
+	    }
 	}
 
     }

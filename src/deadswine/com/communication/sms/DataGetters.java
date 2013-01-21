@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class DataGetters {
     //  private Activity activity;
-
+public String Adress;
     public List<String> getCONVERSATIONS(Context context) {
 
 	List<String> sms = new ArrayList<String>();
@@ -55,12 +55,15 @@ public class DataGetters {
 	final String[] projection = new String[] { "*" };
 
 	Cursor cur = context.getContentResolver().query(uri, null, selection, null, "date DESC");
-
+	
+	
 	while (cur.moveToNext()) {
 	    
 	    String body = cur.getString(cur.getColumnIndexOrThrow("body"));
 	    sms.add(body);
 	}
+	cur.moveToFirst();
+	Adress = cur.getString(cur.getColumnIndexOrThrow("address"));
 	// prints columns names
 	//for (int i = 0; i < cur.getColumnCount(); i++) {
 	 //   Log.v("column names from details activity", cur.getColumnName(i).toString());

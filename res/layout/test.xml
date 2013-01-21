@@ -28,16 +28,17 @@
             android:text="Button" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/detailsEditText"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="Type Message"
             android:inputType="textMultiLine"
             android:maxLength="160" />
 
         <Button
-            android:id="@+id/btnSend"
+            android:id="@+id/detailsBtnSend"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

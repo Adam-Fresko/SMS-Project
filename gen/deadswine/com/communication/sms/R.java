@@ -1000,15 +1000,15 @@ containing a value of this type.
         public static final int btnADD=0x7f05003a;
         public static final int btnAttatch=0x7f05003c;
         public static final int btnSEND=0x7f05003e;
-        public static final int btnSend=0x7f050047;
         public static final int button1=0x7f050045;
         public static final int c_item=0x7f05004b;
         public static final int d_item=0x7f05004c;
         public static final int date=0x7f050037;
         public static final int details=0x7f050040;
+        public static final int detailsBtnSend=0x7f050047;
+        public static final int detailsEditText=0x7f050046;
         public static final int disableHome=0x7f050009;
         public static final int e_item=0x7f05004d;
-        public static final int editText1=0x7f050046;
         public static final int editTextAddContact=0x7f050039;
         public static final int editTextSMS=0x7f05003b;
         public static final int edit_query=0x7f050027;

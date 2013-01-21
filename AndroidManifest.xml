@@ -62,6 +62,8 @@
                 android:enabled="true" >
                 <intent-filter>
                     <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                    <action android:name="deadswine.com.communication.sms.SMS_SENT" />
+                    <action android:name="deadswine.com.communication.sms.SMS_DELIVERED" />
                 </intent-filter>
             </receiver>
 
