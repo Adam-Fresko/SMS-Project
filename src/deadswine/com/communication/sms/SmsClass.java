@@ -4,20 +4,38 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsManager;
-import android.util.Log;
 
+/**
+ * 
+ * @author deadswine
+ *         <p>
+ *         class that handle all SMS sending
+ * 
+ * @see  SmsClass#sendSMS(String,String)
+ * @see SmsClass#deleteSMS()
+ */
 public class SmsClass {
 
+    /*
+     * public void sendSMS(String phoneNumber, String message) {
+     * Log.v("phoneNumber", phoneNumber); Log.v("MEssage", message); SmsManager
+     * sms = SmsManager.getDefault(); sms.sendTextMessage(phoneNumber, null,
+     * message, null, null);
+     * 
+     * }
+     */
+
+    /**
+     * sms sender method, fires 2 pending intents SENT and DELIVERED
+     * 
+     * @param phoneNumber
+     *            Number to witch we send data as String
+     * @param message
+     *            actual message text as String
+     *            
+     *            @see SMSReceiver
+     */
     public void sendSMS(String phoneNumber, String message) {
-	Log.v("phoneNumber", phoneNumber);
-	Log.v("MEssage", message);
-	SmsManager sms = SmsManager.getDefault();
-	sms.sendTextMessage(phoneNumber, null, message, null, null);
-
-    }
-
-    //---sends an SMS message to another device---
-    public void sendS(String phoneNumber, String message) {
 
 	Context context = FragmentLayoutSupport.getAppContext();
 
@@ -29,6 +47,13 @@ public class SmsClass {
 
 	SmsManager sms = SmsManager.getDefault();
 	sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+    }
+    
+    /**
+     * 
+     */
+    public void deleteSMS(){
+	
     }
 
 }

@@ -381,14 +381,14 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    switch (v.getId()) {
 		case R.id.detailsBtnSend:
 
-		    // DataGetters dataGetters = new DataGetters();
+	
 		    SmsClass smsClass = new SmsClass();
-		   // smsClass.sendSMS(adr, detailsEditText.getText().toString());
-		    smsClass.sendS(adr, detailsEditText.getText().toString());
+		  
+		    smsClass.sendSMS(adr, detailsEditText.getText().toString());
 		    detailsEditText.setText("");
 		    detailsEditText.clearFocus();
 
-		   // adapter.notifyDataSetChanged();
+		
 		    
 		    break;
 	    }
