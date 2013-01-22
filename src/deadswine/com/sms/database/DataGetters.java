@@ -1,4 +1,4 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms.database;
 
 import java.util.ArrayList;
 import java.util.List;

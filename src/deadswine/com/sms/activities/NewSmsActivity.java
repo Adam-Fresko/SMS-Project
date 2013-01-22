@@ -1,7 +1,6 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms.activities;
 
-import java.util.ArrayList;
-import android.app.PendingIntent;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -13,8 +12,9 @@ import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.SubMenu;
-import com.actionbarsherlock.widget.SearchView;
+
+import deadswine.com.sms.R;
+
 
 public class NewSmsActivity extends SherlockFragmentActivity implements OnClickListener {
 

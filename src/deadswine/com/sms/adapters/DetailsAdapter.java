@@ -1,8 +1,12 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms.adapters;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import deadswine.com.sms.R;
+import deadswine.com.sms.activities.FragmentLayoutSupport;
+import deadswine.com.sms.activities.FragmentLayoutSupport.DetailsFragment;
 import android.R.bool;
 import android.app.Activity;
 import android.content.Context;

@@ -1,5 +1,6 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms.receivers;
 
+import deadswine.com.sms.AsyncTaskClass;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,16 +11,16 @@ import android.widget.Toast;
 
 /**
  * 
- * @author deadswine Class that handle all sms related receivers
+ * @author Deadswine Class that handle all sms related receivers
  * 
  * 
  * @see SMSReceiver#onReceive(Context, Intent)
  * 
- * @see SMSReceiver#sent()
+ * @see SMSReceiver#sentSMS()
  * 
- * @see SMSReceiver#delivered()
+ * @see SMSReceiver#deliveredSMS()
  * 
- * @see SMSReceiver#received()
+ * @see SMSReceiver#receivedSMS()
  * 
  * 
  */
@@ -30,60 +31,62 @@ public class SMSReceiver extends BroadcastReceiver {
 
     public void onReceive(Context ctx, Intent intent) {
 	context = ctx;
-	if (intent.getAction().equals("deadswine.com.communication.sms.SMS_DELIVERED")) {
-	    delivered();
-	} else if (intent.getAction().equals("deadswine.com.communication.sms.SMS_SENT")) {
-	    sent();
+	if (intent.getAction().equals("deadswine.com.sms.SMS_DELIVERED")) {
+	    deliveredSMS();
+	} else if (intent.getAction().equals("deadswine.com.sms.SMS_SENT")) {
+	    sentSMS();
 
 	} else if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
 
-	    received();
+	    receivedSMS();
 	}
 
     }
+
     /**
-     * Handles sending sms
+     * Handles receiver for sending sms action
      */
-    void sent() {
+    void sentSMS() {
 	switch (getResultCode()) {
 	    case Activity.RESULT_OK:
-		Toast.makeText(context, "SMS sent", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "SMS sent", Toast.LENGTH_LONG).show();
 		break;
 	    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-		Toast.makeText(context, "Generic failure", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "Generic failure", Toast.LENGTH_LONG).show();
 		break;
 	    case SmsManager.RESULT_ERROR_NO_SERVICE:
-		Toast.makeText(context, "No service", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "No service", Toast.LENGTH_LONG).show();
 		break;
 	    case SmsManager.RESULT_ERROR_NULL_PDU:
-		Toast.makeText(context, "Null PDU", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "Null PDU", Toast.LENGTH_LONG).show();
 		break;
 	    case SmsManager.RESULT_ERROR_RADIO_OFF:
-		Toast.makeText(context, "Radio off", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "Radio off", Toast.LENGTH_LONG).show();
 		break;
 	}
     }
 
     /**
-     * Handles sms delivery  action
+     * Handles receiver for sms delivery action
      */
-    void delivered() {
+    void deliveredSMS() {
 	switch (getResultCode()) {
 	    case Activity.RESULT_OK:
-		Toast.makeText(context, "SMS delivered", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "SMS delivered", Toast.LENGTH_LONG).show();
 		break;
 	    case Activity.RESULT_CANCELED:
-		Toast.makeText(context, "SMS not delivered", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "SMS not delivered", Toast.LENGTH_LONG).show();
 		break;
 	}
     }
+
     /**
      * Handles receiving sms
      */
-    void received() {
+    void receivedSMS() {
 
 	Toast.makeText(context, "SMS RECEIVED", Toast.LENGTH_LONG).show();
-	new ReceiverClass().execute("");
+	new AsyncTaskClass().execute("");
     }
 
 }

@@ -1,12 +1,15 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms;
 
 
 import java.util.List;
+import deadswine.com.sms.activities.FragmentLayoutSupport;
+import deadswine.com.sms.adapters.ConversationAdapter;
+import deadswine.com.sms.database.DataGetters;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class ReceiverClass extends AsyncTask<String, Void, String> {
+public class AsyncTaskClass extends AsyncTask<String, Void, String> {
     DataGetters dataGetters = new DataGetters();
 	   List<String>	msgList;
 	   Activity	    activity;

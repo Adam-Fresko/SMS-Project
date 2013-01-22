@@ -1,9 +1,12 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms;
 
+import deadswine.com.sms.activities.FragmentLayoutSupport;
+import deadswine.com.sms.receivers.SMSReceiver;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsManager;
+import android.widget.Adapter;
 
 /**
  * 
@@ -39,8 +42,8 @@ public class SmsClass {
 
 	Context context = FragmentLayoutSupport.getAppContext();
 
-	String SENT = "deadswine.com.communication.sms.SMS_SENT";
-	String DELIVERED = "deadswine.com.communication.sms.SMS_DELIVERED";
+	String SENT = "deadswine.com.sms.receivers.SMS_SENT";
+	String DELIVERED = "deadswine.com.sms.receivers.SMS_DELIVERED";
 
 	PendingIntent sentPI = PendingIntent.getBroadcast(context, 10, new Intent(SENT), 0);
 	PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 11, new Intent(DELIVERED), 0);

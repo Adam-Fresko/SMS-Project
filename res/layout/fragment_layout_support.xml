@@ -28,7 +28,7 @@
         android:id="@+id/titles"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="deadswine.com.communication.sms.FragmentLayoutSupport$TitlesFragment"
+        class="deadswine.com.sms.activities.FragmentLayoutSupport$TitlesFragment"
         android:tag="tagTitles" />
 
 </FrameLayout>

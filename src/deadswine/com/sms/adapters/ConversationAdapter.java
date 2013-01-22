@@ -1,9 +1,11 @@
-package deadswine.com.communication.sms;
+package deadswine.com.sms.adapters;
 
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import deadswine.com.sms.R;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -29,7 +31,7 @@ public class ConversationAdapter extends BaseAdapter {
     ImageView		     imgArrow;
 
     private static Activity       activity;
-    static List<String>	   msgList;
+    public static List<String>	   msgList;
     private static LayoutInflater inflater = null;
 
     public String		 messageCount, messageHasAttachment, messageRead, messageDate, messageSnippet;

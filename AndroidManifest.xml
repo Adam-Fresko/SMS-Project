@@ -22,7 +22,7 @@
      to come from a domain that you own or have control over.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="deadswine.com.communication.sms"
+    package="deadswine.com.sms"
     android:versionCode="100"
     android:versionName="4.2.0" >
 
@@ -45,7 +45,7 @@
             android:icon="@drawable/ic_launcher"
             android:label="@string/application_name" >
             <activity
-                android:name=".FragmentLayoutSupport"
+                android:name=".activities.FragmentLayoutSupport"
                 android:label="@string/application_name" >
                 <intent-filter>
                     <action android:name="android.intent.action.MAIN" />
@@ -54,16 +54,16 @@
                     <category android:name="android.intent.category.LAUNCHER" />
                 </intent-filter>
             </activity>
-            <activity android:name=".FragmentLayoutSupport$DetailsActivity" />
-            <activity android:name=".SmsActivity" />
+            <activity android:name=".activities.FragmentLayoutSupport$DetailsActivity" />
+          <!--   <activity android:name=".activities.NewSmsActivity" />--> 
 
             <receiver
-                android:name="SMSReceiver"
+                android:name="deadswine.com.sms.receivers.SMSReceiver"
                 android:enabled="true" >
                 <intent-filter>
                     <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-                    <action android:name="deadswine.com.communication.sms.SMS_SENT" />
-                    <action android:name="deadswine.com.communication.sms.SMS_DELIVERED" />
+                    <action android:name="deadswine.com.sms.receivers.SMS_SENT" />
+                    <action android:name="deadswine.com.sms.receivers.SMS_DELIVERED" />
                 </intent-filter>
             </receiver>
 
@@ -71,7 +71,7 @@
                 android:name=".NewSmsActivity"
                 android:label="@string/application_name" >
             </activity>
-            <!-- <activity android:name=".NewSmsActivity$" /> -->
+            
 
         </application>
  

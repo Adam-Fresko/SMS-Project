@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package deadswine.com.communication.sms;
+package deadswine.com.sms.activities;
 
 import java.util.List;
 import android.app.Activity;
@@ -38,6 +38,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 import com.actionbarsherlock.widget.SearchView;
+
+import deadswine.com.sms.AsyncTaskClass;
+import deadswine.com.sms.R;
+import deadswine.com.sms.SmsClass;
+import deadswine.com.sms.adapters.ConversationAdapter;
+import deadswine.com.sms.adapters.DetailsAdapter;
+import deadswine.com.sms.database.DataGetters;
+
 
 /**
  * Demonstration of using fragments to implement different activity layouts.
@@ -94,7 +102,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	super.onPostResume();
 	Log.d("FragmentLayoutSupport", "CALLED -- onPostResume()");
 
-	new ReceiverClass().execute("");
+	new AsyncTaskClass().execute("");
     }
 
     public static Context getAppContext() {
@@ -146,9 +154,9 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	static boolean	     mDualPane;
 	int			mCurCheckPosition = 0;
 
-	static ConversationAdapter adapter;
+	public static ConversationAdapter adapter;
 
-	static Activity	    activity;
+	public static Activity	    activity;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -324,7 +332,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 
 	static DetailsAdapter adapter;
 	static Activity       activity;
-	static int	    intWitchConversationShown;
+	public static int	    intWitchConversationShown;
 
 	public static DetailsFragment newInstance(int index) {
 	    DetailsFragment f = new DetailsFragment();
@@ -387,9 +395,6 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		    smsClass.sendSMS(adr, detailsEditText.getText().toString());
 		    detailsEditText.setText("");
 		    detailsEditText.clearFocus();
-
-		
-		    
 		    break;
 	    }
 	}
