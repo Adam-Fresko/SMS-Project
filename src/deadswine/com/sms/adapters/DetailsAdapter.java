@@ -31,7 +31,7 @@ public class DetailsAdapter extends BaseAdapter {
     ImageView		     imgArrow;
 
     private Activity	      activity;
-    static List<String>	   msgList;
+    public static List<String>	   msgList;
     private static LayoutInflater inflater = null;
 
     public String		 messageCount, messageHasAttachment, messageRead, messageDate, messageSnippet, messageType;
@@ -46,7 +46,7 @@ public class DetailsAdapter extends BaseAdapter {
 
     public Uri		    smsUri   = Uri.parse("content://sms");
 
-    public boolean		testXX   = false;
+   
 
     public DetailsAdapter(Activity a, List<String> data) {
 	activity = a;
@@ -56,7 +56,7 @@ public class DetailsAdapter extends BaseAdapter {
 	intWitchConversationShown = FragmentLayoutSupport.DetailsFragment.intWitchConversationShown;
 	querryConversationDB();
 
-	testXX = false;
+	
 	
     }
 
@@ -117,11 +117,11 @@ public class DetailsAdapter extends BaseAdapter {
     public void querrySmsDB(int position ) {
 	
 
-	if (testXX == false) {
+	
 	    curQuerrySmsDB = activity.getApplicationContext().getContentResolver().query(smsUri, null, ConversationSelection, null, "date ASC");
 	   
-	    testXX = true;
-	}
+	
+	
 
 	if (curQuerrySmsDB.moveToPosition(position)) {
 
@@ -129,6 +129,8 @@ public class DetailsAdapter extends BaseAdapter {
 	    messageDate = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("date"));
 	    messageSnippet = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("body"));
 	    messageType = curQuerrySmsDB.getString(curQuerrySmsDB.getColumnIndexOrThrow("type"));
+	    messageSnippet = messageSnippet + " position "+ position;
+	    Log.d(""+position, "" +messageSnippet);
 
 	}
 

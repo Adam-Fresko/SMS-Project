@@ -29,6 +29,7 @@ public class SmsClass {
      */
 
     /**
+     * 
      * sms sender method, fires 2 pending intents SENT and DELIVERED
      * 
      * @param phoneNumber
@@ -50,6 +51,7 @@ public class SmsClass {
 
 	SmsManager sms = SmsManager.getDefault();
 	sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+	
     }
     
     /**

@@ -17,6 +17,7 @@
 package deadswine.com.sms.activities;
 
 import java.util.List;
+import android.R.bool;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,14 +39,12 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 import com.actionbarsherlock.widget.SearchView;
-
 import deadswine.com.sms.AsyncTaskClass;
 import deadswine.com.sms.R;
 import deadswine.com.sms.SmsClass;
 import deadswine.com.sms.adapters.ConversationAdapter;
 import deadswine.com.sms.adapters.DetailsAdapter;
 import deadswine.com.sms.database.DataGetters;
-
 
 /**
  * Demonstration of using fragments to implement different activity layouts.
@@ -133,7 +132,7 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
 	if (item.getTitle() == "Compose") {
-	    Log.d("cccccccccccccccccccccccccccccc", "compose");
+
 	    Intent intent = new Intent();
 	    intent.setClass(this, NewSmsActivity.class);
 
@@ -151,8 +150,9 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
      */
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static class TitlesFragment extends SherlockListFragment {
-	static boolean	     mDualPane;
-	int			mCurCheckPosition = 0;
+	static boolean		    mDualPane;
+	public static boolean		    widoczny;
+	int			       mCurCheckPosition = 0;
 
 	public static ConversationAdapter adapter;
 
@@ -161,8 +161,10 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 	    super.onActivityCreated(savedInstanceState);
-
+	    
+	    widoczny = true;
 	    activity = getActivity();
+	    
 	    DataGetters dataGetters = new DataGetters();
 
 	    List<String> msgList = dataGetters.getCONVERSATIONS(activity.getApplicationContext());
@@ -242,6 +244,13 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		startActivity(intent);
 	    }
 	}
+
+	@Override
+	public void onDetach() {
+	    widoczny=false;
+	    super.onDetach();
+	}
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,9 +339,10 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	 * text at 'index'.
 	 */
 
-	static DetailsAdapter adapter;
-	static Activity       activity;
+	public static DetailsAdapter adapter;
+	public static Activity       activity;
 	public static int	    intWitchConversationShown;
+	public static Boolean	widoczny;
 
 	public static DetailsFragment newInstance(int index) {
 	    DetailsFragment f = new DetailsFragment();
@@ -362,12 +372,13 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 		// the view hierarchy; it would just never be used.
 		return null;
 	    }
+	    widoczny = true;
 
 	    intWitchConversationShown = getShownIndex();
 	    activity = getActivity();
 	    DataGetters dataGetters = new DataGetters();
 
-	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), getShownIndex());
+	    List<String> msgList = dataGetters.getSMS(activity.getApplicationContext(), intWitchConversationShown);
 	    adr = dataGetters.Adress;
 	    View view = inflater.inflate(R.layout.test, container, false);
 
@@ -389,14 +400,19 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    switch (v.getId()) {
 		case R.id.detailsBtnSend:
 
-	
 		    SmsClass smsClass = new SmsClass();
-		  
+
 		    smsClass.sendSMS(adr, detailsEditText.getText().toString());
 		    detailsEditText.setText("");
 		    detailsEditText.clearFocus();
 		    break;
 	    }
+	}
+
+	@Override
+	public void onDetach() {
+	    widoczny = false;
+	    super.onDetach();
 	}
 
     }

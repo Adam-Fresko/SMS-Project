@@ -1,6 +1,8 @@
 package deadswine.com.sms.receivers;
 
 import deadswine.com.sms.AsyncTaskClass;
+import deadswine.com.sms.activities.FragmentLayoutSupport;
+import deadswine.com.sms.activities.FragmentLayoutSupport.DetailsFragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +13,11 @@ import android.widget.Toast;
 
 /**
  * 
- * @author Deadswine Class that handle all sms related receivers
+ * @author Deadswine
+ *         <p>
+ *         Class that handle all sms related receivers
+ *         <p>
+ *         Receivers sent, delivered, received
  * 
  * 
  * @see SMSReceiver#onReceive(Context, Intent)
@@ -86,7 +92,10 @@ public class SMSReceiver extends BroadcastReceiver {
     void receivedSMS() {
 
 	Toast.makeText(context, "SMS RECEIVED", Toast.LENGTH_LONG).show();
-	new AsyncTaskClass().execute("");
-    }
+	if (DetailsFragment.widoczny) {
+	    new AsyncTaskClass().execute("");
 
+	}
+
+    }
 }
