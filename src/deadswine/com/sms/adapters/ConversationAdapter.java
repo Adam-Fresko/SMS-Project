@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import deadswine.com.sms.R;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -31,7 +30,7 @@ public class ConversationAdapter extends BaseAdapter {
     ImageView		     imgArrow;
 
     private static Activity       activity;
-    public static List<String>	   msgList;
+    public static List<String>    msgList;
     private static LayoutInflater inflater = null;
 
     public String		 messageCount, messageHasAttachment, messageRead, messageDate, messageSnippet;
@@ -39,16 +38,19 @@ public class ConversationAdapter extends BaseAdapter {
     public String		 photo_id;
     public String		 contactImg;
     public String		 conversationID;
-    
-    public static String[][]	     tablicaData;   // 0 = listWithWho // 1 = listBody  // 2 = listDate // 3 = listQuickContactBadge
+
+    public static String[][]      tablicaData;								 // 0 = listWithWho // 1 = listBody  // 2 = listDate // 3 = listQuickContactBadge // 10 = tmp if resfreshed
+    int			   tmp;
 
     public ConversationAdapter(Activity a, List<String> data) {
 	activity = a;
 	msgList = data;
 	inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	tablicaData = new String[msgList.size()][5];
+	tablicaData = new String[msgList.size()][10];
+	
+	tmp = 0;
     }
-    
+
     public static class ViewHolder {
 	public TextView	  listDate, listBody, listWithWho;
 	public QuickContactBadge listQuickContactBadge;
@@ -60,7 +62,7 @@ public class ConversationAdapter extends BaseAdapter {
 	public String	    photo_id;
 	public String	    contactImg;
 	public String	    conversationID;
-	
+
     }
 
     public int getCount() {
@@ -73,6 +75,15 @@ public class ConversationAdapter extends BaseAdapter {
 
     public long getItemId(int position) {
 	return position;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+	tmp = tmp + 1;
+	
+	
+	super.notifyDataSetChanged();
+	
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -94,17 +105,20 @@ public class ConversationAdapter extends BaseAdapter {
 	    holder = (ViewHolder) vi.getTag();
 	}
 
-	
-	    holder.position = position;
-	    
-	    if(tablicaData[position][0]==null){
-		 new fillConversation(position, holder).execute("");
-	    }else {
-		 holder.listWithWho.setText(tablicaData[position][0]);
-		holder.listBody.setText(tablicaData[position][1]);
-		holder.listDate.setText(tablicaData[position][2]);
-	    }
-	    
+	holder.position = position;
+
+	if (tablicaData[position][0] == null) {
+	    new fillConversation(position, holder).execute("");
+	    tablicaData[position][9] = "0";
+	} else if (Integer.toString(tmp) != tablicaData[position][9]) {
+	    new fillConversation(position, holder).execute("");
+	}
+
+	else {
+	    holder.listWithWho.setText(tablicaData[position][0]);
+	    holder.listBody.setText(tablicaData[position][1]);
+	    holder.listDate.setText(tablicaData[position][2]);
+	}
 
 	return vi;
     }
@@ -157,10 +171,9 @@ public class ConversationAdapter extends BaseAdapter {
 	private ViewHolder mHolder;
 
 	public fillConversation(int position, ViewHolder holder) {
-	    
+
 	    mPosition = position;
 	    mHolder = holder;
-	  
 
 	}
 
@@ -168,17 +181,17 @@ public class ConversationAdapter extends BaseAdapter {
 	protected void onPostExecute(Object result) {
 
 	    if (mHolder.position == mPosition) {
-		
+
 		Long timestamp = Long.parseLong(mHolder.messageDate);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(timestamp);
 		Date finaldate = calendar.getTime();
 		String smsDate = finaldate.toString();
-		
+
 		mHolder.listWithWho.setText(mHolder.contactName);
 		mHolder.listBody.setText(mHolder.messageSnippet);
 		mHolder.listDate.setText(smsDate);
-		
+
 		tablicaData[mHolder.position][0] = mHolder.contactName;
 		tablicaData[mHolder.position][1] = mHolder.messageSnippet;
 		tablicaData[mHolder.position][2] = smsDate;
@@ -190,7 +203,7 @@ public class ConversationAdapter extends BaseAdapter {
 
 	@Override
 	protected Object doInBackground(Object... params) {
-	   
+
 	    querryConversationDB(mPosition);
 	    querrySmsDB();
 	    querryPeople();
@@ -200,7 +213,6 @@ public class ConversationAdapter extends BaseAdapter {
 
 	public void querryConversationDB(int position) {
 
-	   
 	    final String[] projection = new String[] { "snippet", "message_count", "has_attachment", "read", "date", "_id" };
 	    Uri uri = Uri.parse("content://mms-sms/conversations?simple=true");
 	    Cursor cur = activity.getApplicationContext().getContentResolver().query(uri, projection, null, null, "date DESC");
@@ -216,7 +228,6 @@ public class ConversationAdapter extends BaseAdapter {
 	}
 
 	public void querrySmsDB() {
-	   
 
 	    final String[] projection = new String[] { "address" };
 	    String selection = "thread_id = " + mHolder.conversationID;
@@ -229,7 +240,7 @@ public class ConversationAdapter extends BaseAdapter {
 	}
 
 	public void querryPeople() {
-	   
+
 	    final String[] PROJECTION = new String[] { PhoneLookup.DISPLAY_NAME };
 	    Uri personUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, mHolder.contactPhone);
 	    Cursor cur = activity.getContentResolver().query(personUri, PROJECTION, null, null, null);

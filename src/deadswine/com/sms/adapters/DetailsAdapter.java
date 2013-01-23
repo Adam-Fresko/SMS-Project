@@ -106,7 +106,7 @@ public class DetailsAdapter extends BaseAdapter {
 	//
 	listBody.setText(messageSnippet);
 	listDate.setText(smsDate);
-
+	listWithWho.setText(contactPhone);
 	
 
 	//listQuickContactBadge.assignContactFromPhone(contactPhone, false);
@@ -138,7 +138,6 @@ public class DetailsAdapter extends BaseAdapter {
 
     public void querryConversationDB() {
 	
-
 	Uri uri = Uri.parse("content://mms-sms/conversations?simple=true");
 
 	Cursor cursor = activity.getApplicationContext().getContentResolver().query(uri, null, null, null, "date DESC");

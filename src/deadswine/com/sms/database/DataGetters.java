@@ -29,9 +29,9 @@ public String Adress;
 	    sms.add(snippet);
 	}
 	// prints columns names
-	//for (int i = 0; i < cur.getColumnCount(); i++) {
-	 //   Log.v("column names from sms", cur.getColumnName(i).toString());
-	//}
+	for (int i = 0; i < cur.getColumnCount(); i++) {
+	   Log.v("column names from sms conversations", cur.getColumnName(i).toString());
+	}
 
 	return sms;
     }

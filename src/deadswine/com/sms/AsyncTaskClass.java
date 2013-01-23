@@ -2,8 +2,6 @@ package deadswine.com.sms;
 
 import java.util.List;
 import deadswine.com.sms.activities.FragmentLayoutSupport;
-import deadswine.com.sms.activities.FragmentLayoutSupport.DetailsFragment;
-import deadswine.com.sms.activities.FragmentLayoutSupport.TitlesFragment;
 import deadswine.com.sms.adapters.ConversationAdapter;
 import deadswine.com.sms.adapters.DetailsAdapter;
 import deadswine.com.sms.database.DataGetters;

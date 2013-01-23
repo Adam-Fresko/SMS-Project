@@ -17,7 +17,7 @@
 package deadswine.com.sms.activities;
 
 import java.util.List;
-import android.R.bool;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -390,6 +390,9 @@ public class FragmentLayoutSupport extends SherlockFragmentActivity {
 	    detailsBtnSend = (Button) view.findViewById(R.id.detailsBtnSend);
 	    detailsBtnSend.setOnClickListener(this);
 	    detailsEditText = (EditText) view.findViewById(R.id.detailsEditText);
+	    
+	   
+	    
 	    return view;
 
 	}
